@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Spark
 
-## Getting Started
+Video reference library for creative teams. Submit, tag, and organize
+video content from YouTube, Instagram, and TikTok.
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repo
+2. Install dependencies:
+   ```
+   pnpm install
+   ```
+3. Set up Supabase:
+   - Create a project at https://supabase.com (free tier)
+   - Run `supabase/schema.sql` in the SQL editor
+   - Copy project URL and anon key
+4. Configure environment:
+   ```
+   cp .env.example .env.local
+   # Fill in your Supabase credentials
+   ```
+5. Start the dev server:
+   ```
+   pnpm dev
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js 14** (App Router) — unified API routes and React
+- **TypeScript** — strict mode throughout
+- **Tailwind + shadcn/ui** — accessible, consistent design system
+- **Supabase Postgres** — persistent storage, real relational DB
 
-## Learn More
+## Database Design
 
-To learn more about Next.js, take a look at the following resources:
+Three tables with a normalized schema:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **assets** — stores URL (original + normalized), platform, timestamp
+- **tags** — preset tag definitions, seeded on setup
+- **asset_tags** — junction table linking assets to tags
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+A **view** (assets_with_tags) joins all three to avoid N+1 queries.
+Indexes cover the two primary access patterns: duplicate lookup by
+normalized_url and grid display ordered by created_at.
 
-## Deploy on Vercel
+URL normalization strips tracking params and trailing slashes so
+"youtube.com/watch?v=abc&utm_source=twitter" and
+"youtube.com/watch?v=abc" resolve to the same asset.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Trade-offs
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No video thumbnails or embeds (would integrate oEmbed APIs)
+- No RLS policies (would add per-user row-level security with Supabase Auth)
+- Tag creation is seed-only (would support user-defined tags)
+- Asset creation uses sequential queries instead of a DB transaction
+  (would use a Postgres function for atomicity in production)
+
+## Next Steps
+
+- oEmbed integration for video thumbnails and titles
+- Supabase Auth + RLS for per-user libraries
+- Full-text search across URLs and tags
+- Cursor-based pagination for large libraries
+- Drag-and-drop tag reordering
+- E2E tests with Playwright
+
+## Tools
+
+Built with assistance from Claude AI.
