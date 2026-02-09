@@ -88,7 +88,7 @@ export default function Home() {
           )}
         </div>
       </div>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-8 sm:pb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-8 sm:pb-12 min-h-[200px]">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-4">
           Library
         </p>
