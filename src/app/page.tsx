@@ -34,7 +34,12 @@ export default function Home() {
         const res = await fetch("/api/assets", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: preview.url, tags }),
+          body: JSON.stringify({
+            url: preview.url,
+            tags,
+            thumbnail_url: preview.thumbnail_url,
+            title: preview.title,
+          }),
         });
 
         const data = await res.json();

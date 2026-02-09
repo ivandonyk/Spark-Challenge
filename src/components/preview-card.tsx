@@ -7,6 +7,7 @@ import TagToggle from "@/components/tag-toggle";
 import { PreviewResponse, Platform, PRESET_TAGS } from "@/lib/types";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type Props = {
   preview: PreviewResponse;
@@ -68,7 +69,22 @@ export default function PreviewCard({ preview, onSave, onCancel, isSaving }: Pro
   }
 
   return (
-    <Card className="p-4 sm:p-5 space-y-4">
+    <Card className="overflow-hidden space-y-4">
+      {preview.thumbnail_url && (
+        <div className="relative aspect-video">
+          <Image
+            src={preview.thumbnail_url}
+            alt={preview.title ?? "Video thumbnail"}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, 640px"
+          />
+        </div>
+      )}
+      <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-4">
+      {preview.title && (
+        <p className="text-sm font-medium line-clamp-2">{preview.title}</p>
+      )}
       <div className="flex items-center gap-2">
         <span
           className={cn(
@@ -119,6 +135,7 @@ export default function PreviewCard({ preview, onSave, onCancel, isSaving }: Pro
             "Save"
           )}
         </Button>
+      </div>
       </div>
     </Card>
   );
