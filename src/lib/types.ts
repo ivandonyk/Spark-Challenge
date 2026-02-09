@@ -5,6 +5,8 @@ export type DbAsset = {
   url: string;
   normalized_url: string;
   platform: Platform;
+  thumbnail_url: string | null;
+  title: string | null;
   created_at: string;
 };
 
@@ -18,6 +20,8 @@ export type Asset = {
   url: string;
   platform: Platform;
   tags: string[];
+  thumbnail_url: string | null;
+  title: string | null;
   created_at: string;
 };
 
@@ -25,6 +29,8 @@ export type PreviewResponse = {
   url: string;
   platform: Platform;
   existing_asset: Asset | null;
+  thumbnail_url: string | null;
+  title: string | null;
 };
 
 export type SaveResponse = {

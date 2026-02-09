@@ -4,7 +4,7 @@ import { Asset, DbTag, Platform } from "./types";
 export async function findAssetByUrl(normalizedUrl: string): Promise<Asset | null> {
   const { data, error } = await supabase
     .from("assets_with_tags")
-    .select("id, url, platform, tags, created_at")
+    .select("id, url, platform, tags, thumbnail_url, title, created_at")
     .eq("normalized_url", normalizedUrl)
     .maybeSingle();
 
@@ -17,11 +17,13 @@ export async function createAsset(
   url: string,
   normalizedUrl: string,
   platform: Platform,
-  tags: string[]
+  tags: string[],
+  thumbnailUrl: string | null,
+  title: string | null
 ): Promise<Asset> {
   const { data: asset, error: insertError } = await supabase
     .from("assets")
-    .insert({ url, normalized_url: normalizedUrl, platform })
+    .insert({ url, normalized_url: normalizedUrl, platform, thumbnail_url: thumbnailUrl, title })
     .select()
     .single();
 
@@ -51,7 +53,7 @@ export async function createAsset(
 
   const { data: fullAsset, error: viewError } = await supabase
     .from("assets_with_tags")
-    .select("id, url, platform, tags, created_at")
+    .select("id, url, platform, tags, thumbnail_url, title, created_at")
     .eq("id", asset.id)
     .single();
 
@@ -62,7 +64,7 @@ export async function createAsset(
 export async function getAllAssets(): Promise<Asset[]> {
   const { data, error } = await supabase
     .from("assets_with_tags")
-    .select("id, url, platform, tags, created_at")
+    .select("id, url, platform, tags, thumbnail_url, title, created_at")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
