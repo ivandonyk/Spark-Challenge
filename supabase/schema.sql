@@ -4,6 +4,8 @@ create table assets (
   url            text not null,
   normalized_url text not null unique,
   platform       text not null check (platform in ('youtube', 'instagram', 'tiktok')),
+  thumbnail_url  text,
+  title          text,
   created_at     timestamptz not null default now()
 );
 
@@ -38,6 +40,8 @@ select
   a.url,
   a.normalized_url,
   a.platform,
+  a.thumbnail_url,
+  a.title,
   a.created_at,
   coalesce(
     array_agg(t.name order by t.name) filter (where t.name is not null),

@@ -37,7 +37,7 @@ Open http://localhost:3000
 
 Three tables with a normalized schema:
 
-- **assets** — stores URL (original + normalized), platform, timestamp
+- **assets** — stores URL (original + normalized), platform, thumbnail, title, timestamp
 - **tags** — preset tag definitions, seeded on setup
 - **asset_tags** — junction table linking assets to tags
 
@@ -51,7 +51,7 @@ URL normalization strips tracking params and trailing slashes so
 
 ## Trade-offs
 
-- No video thumbnails or embeds (would integrate oEmbed APIs)
+- Video thumbnails via oEmbed — YouTube uses direct URL construction, TikTok and Instagram use oEmbed endpoints (Instagram may require auth for some posts)
 - No RLS policies (would add per-user row-level security with Supabase Auth)
 - Tag creation is seed-only (would support user-defined tags)
 - Asset creation uses sequential queries instead of a DB transaction
@@ -59,7 +59,6 @@ URL normalization strips tracking params and trailing slashes so
 
 ## Next Steps
 
-- oEmbed integration for video thumbnails and titles
 - Supabase Auth + RLS for per-user libraries
 - Full-text search across URLs and tags
 - Cursor-based pagination for large libraries
