@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, AlertCircle } from "lucide-react";
@@ -16,8 +16,6 @@ export default function SubmissionForm({ onPreview, isPreviewActive }: Props) {
   const [url, setUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = url.trim();
@@ -59,7 +57,6 @@ export default function SubmissionForm({ onPreview, isPreviewActive }: Props) {
     <form onSubmit={handleSubmit} aria-busy={isLoading}>
       <div className="flex gap-2">
         <Input
-          ref={inputRef}
           type="text"
           placeholder="Paste a YouTube, Instagram, or TikTok URL..."
           value={url}
@@ -74,7 +71,7 @@ export default function SubmissionForm({ onPreview, isPreviewActive }: Props) {
         <Button
           type="submit"
           disabled={!url.trim() || isLoading}
-          className="min-w-[80px] h-10"
+          className="min-w-[80px] h-10 active:scale-[0.98]"
         >
           {isLoading ? <Loader2 className="size-4 animate-spin" /> : "Preview"}
         </Button>
