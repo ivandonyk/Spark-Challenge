@@ -28,7 +28,7 @@ Open http://localhost:3000
 
 ## Stack
 
-- **Next.js 14** (App Router) — unified API routes and React
+- **Next.js 16** (App Router) — unified API routes and React
 - **TypeScript** — strict mode throughout
 - **Tailwind + shadcn/ui** — accessible, consistent design system
 - **Supabase Postgres** — persistent storage, real relational DB
