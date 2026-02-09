@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isValidUrl, detectPlatform, normalizeUrl } from "@/lib/validators";
 import { findAssetByUrl } from "@/lib/db";
+import { fetchThumbnail } from "@/lib/oembed";
 import { PreviewResponse, ApiError } from "@/lib/types";
 
 export async function POST(request: NextRequest) {
@@ -31,12 +32,17 @@ export async function POST(request: NextRequest) {
     }
 
     const normalized = normalizeUrl(url);
-    const existingAsset = await findAssetByUrl(normalized);
+    const [existingAsset, thumbnail] = await Promise.all([
+      findAssetByUrl(normalized),
+      fetchThumbnail(url, platform),
+    ]);
 
     return NextResponse.json<PreviewResponse>({
       url,
       platform,
       existing_asset: existingAsset,
+      thumbnail_url: thumbnail.thumbnail_url,
+      title: thumbnail.title,
     });
   } catch {
     return NextResponse.json<ApiError>(

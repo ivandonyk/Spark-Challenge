@@ -20,6 +20,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const url = body.url?.trim();
     const tags: string[] = Array.isArray(body.tags) ? body.tags : [];
+    const thumbnailUrl: string | null = body.thumbnail_url ?? null;
+    const title: string | null = body.title ?? null;
 
     if (!url) {
       return NextResponse.json<ApiError>(
@@ -53,7 +55,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const asset = await createAsset(url, normalized, platform, tags);
+    const asset = await createAsset(url, normalized, platform, tags, thumbnailUrl, title);
     return NextResponse.json<SaveResponse>(
       { asset, created: true },
       { status: 201 }
